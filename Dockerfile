@@ -6,14 +6,13 @@ RUN apt-get update \
     && apt-get update && apt-get install -y google-chrome-stable \
     && groupadd -r -g 9000 lh_user && useradd -m -r -u 9000 -g lh_user lh_user \
     && apt-get purge -y --auto-remove \
-    && npm install -g lighthouse totp-generator  puppeteer-core \
-    && chown -R lh_user:lh_user /home/lh_user
+    &&  su lh_user -c 'NPM_CONFIG_PREFIX=~/.npm npm install -g totp-generator lighthouse puppeteer-core'
 
 USER lh_user
 
 WORKDIR /home/lh_user
 
-ENV NODE_PATH=/home/lh_user/.npm/node_modules
+ENV NODE_PATH=/home/lh_user/.npm/lib/node_modules
 ENV PATH=/home/lh_user/.npm/bin:$PATH
 
 ENTRYPOINT ["lighthouse"]
